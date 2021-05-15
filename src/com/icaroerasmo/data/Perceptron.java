@@ -12,7 +12,7 @@ public class Perceptron {
 	private List<String> valoresTeste;
 	private List<Double> pesos;
 	private int indexInstanciaTeste = 0;
-	private double[] valoresF = new double[] {0, 1};
+	private double[] valoresF;
 	
 	public Perceptron(Double eta, Double threshold, Double bias, List<String> valoresTeste, List<Double> saidas, List<Double> pesos) {
 		this.eta = eta;
