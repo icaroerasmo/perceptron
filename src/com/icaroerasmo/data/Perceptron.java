@@ -55,7 +55,7 @@ public class Perceptron {
 		return peso + eta * (y - y1) * xi;
 	}
 	
-	public Double predict(String valorTeste) {
+	public Double prediz(String valorTeste) {
 		var u = bias;
 		for(var peso : pesos) {
 			var indexOf = pesos.indexOf(peso);
