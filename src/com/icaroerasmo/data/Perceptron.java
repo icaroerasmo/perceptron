@@ -5,31 +5,39 @@ import java.util.stream.Collectors;
 
 public class Perceptron {
 	
-	private Double y;
+	private List<Double> saidas;
 	private Double eta;
 	private Double threshold;
 	private Double bias;
 	private List<String> valoresTeste;
 	private List<Double> pesos;
 	private int indexInstanciaTeste = 0;
+	private double[] valoresF = new double[] {0, 1};
 	
-	public Perceptron(Double eta, Double threshold, Double bias, List<String> valoresTeste, Double y, List<Double> pesos) {
+	public Perceptron(Double eta, Double threshold, Double bias, List<String> valoresTeste, List<Double> saidas, List<Double> pesos) {
 		this.eta = eta;
 		this.threshold = threshold;
 		this.bias = bias;
 		this.valoresTeste = valoresTeste;
-		this.y = y;
+		this.saidas = saidas;
 		this.pesos = pesos;
 	}
 	
 	public void treina() {
 		var valorPredito = calculaFu();
-		while(!valorPredito.equals(y)) {
-			atualizaBias(eta, valorPredito, y);
+		var valorAlvo = saidas.get(indexInstanciaTeste);
+		
+		atualizaFU();
+		
+		while(!valorPredito.equals(valorAlvo)) {
+			
+			atualizaBias(eta, valorPredito, valorAlvo);
 			atualizaPesos(valorPredito);
-			indexInstanciaTeste++;
+			
+			atualizaIndice();
+			
 			valorPredito = calculaFu();
-			System.out.println(valorPredito);
+			valorAlvo = saidas.get(indexInstanciaTeste);
 		}
 	}
 	
@@ -39,12 +47,22 @@ public class Perceptron {
 	
 	public void atualizaPesos(Double valorPredito) {
 		pesos = pesos.stream().
-				map(peso -> atualizaPeso(peso, eta, valorPredito, y, convertePesoParaValor(peso))).
+				map(peso -> atualizaPeso(peso, eta, valorPredito, saidas.get(indexInstanciaTeste), convertePesoParaValor(peso))).
 				collect(Collectors.toList());
 	}
 	
 	public Double atualizaPeso(Double peso, Double eta, Double y1, Double y, Double xi) {
 		return peso + eta * (y - y1) * xi;
+	}
+	
+	public Double predict(String valorTeste) {
+		var u = bias;
+		for(var peso : pesos) {
+			var indexOf = pesos.indexOf(peso);
+			var valor = Double.parseDouble(""+valorTeste.charAt(indexOf));
+			u += valor * peso + threshold;
+		}
+		return u < threshold ? valoresF[0] : valoresF[1];
 	}
 	
 	private Double calculaU() {
@@ -61,10 +79,22 @@ public class Perceptron {
 		return Double.parseDouble("" + valoresTeste.get(indexInstanciaTeste).charAt(indexOf));
 	}
 	
-	// Tenho que descobrir como saber
-	// como calcular os valores de saída
+	private void atualizaIndice() {
+		if(indexInstanciaTeste < valoresTeste.size() - 1) {
+			indexInstanciaTeste++;
+		} else {
+			indexInstanciaTeste = 0;
+		}
+	}
+	
+	// Tenho que descobrir como atualizar
+	// os valores de FU
+	private void atualizaFU() {
+		valoresF = new double[] {saidas.get(0), saidas.get(saidas.size()-1)};
+	}
+	
 	private Double calculaFu() {
 		var u = calculaU();
-		return u < threshold ? 0D : 1D;
+		return u < threshold ? valoresF[0] : valoresF[1];
 	}
 }
