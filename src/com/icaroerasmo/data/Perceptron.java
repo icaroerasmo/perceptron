@@ -24,10 +24,11 @@ public class Perceptron {
 	}
 	
 	public void treina() {
-		var valorPredito = calculaFu();
-		var valorAlvo = saidas.get(indexInstanciaTeste);
 		
 		atualizaFU();
+		
+		var valorPredito = calculaFu();
+		var valorAlvo = saidas.get(indexInstanciaTeste);
 		
 		while(!valorPredito.equals(valorAlvo)) {
 			
