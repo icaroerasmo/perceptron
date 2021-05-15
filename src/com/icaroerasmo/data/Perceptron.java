@@ -91,7 +91,8 @@ public class Perceptron {
 	// Tenho que descobrir como atualizar
 	// os valores de FU
 	private void atualizaFU() {
-		valoresF = new double[] {saidas.get(0), saidas.get(saidas.size()-1)};
+		List<Double> uniqueVals = saidas.stream().distinct().collect(Collectors.toList());
+		valoresF = new double[] {uniqueVals.get(0), uniqueVals.get(uniqueVals.size()-1)};
 	}
 	
 	private Double calculaFu() {
