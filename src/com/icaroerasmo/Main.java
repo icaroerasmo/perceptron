@@ -16,11 +16,11 @@ public class Main {
 		List<Double> labels = Arrays.asList(-1D, 1D);
 		List<Double> pesos = Arrays.asList(0.4, -0.6, 0.6);
 	
-		Perceptron perceptron = new Perceptron(eta, threshold, bias, instancias, labels, pesos);
-		perceptron.treina();
+		Perceptron perceptron = new Perceptron(eta, threshold, bias, pesos);
+		perceptron.treina(instancias, labels);
 		System.out.println(perceptron.prediz("111"));
-		System.out.println(perceptron.prediz("000"));
 		System.out.println(perceptron.prediz("100"));
+		System.out.println(perceptron.prediz("000"));
 		System.out.println(perceptron.prediz("011"));
 	}
 }
