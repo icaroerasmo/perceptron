@@ -10,7 +10,7 @@ public class Perceptron {
 	private Double bias;
 	private List<Double> pesos;
 	private int indexInstanciaTeste = 0;
-	private double[] valoresF;
+	private double[] valoresF = {0D, 1D};
 	
 	public Perceptron(Double eta, Double threshold, Double bias, List<Double> pesos) {
 		this.eta = eta;
@@ -21,8 +21,6 @@ public class Perceptron {
 	
 	public void treina(List<String> valoresTeste, List<Double> saidas) {
 		
-		atualizaFU(saidas);
-		
 		var valorPredito = prediz(valoresTeste.get(indexInstanciaTeste));
 		var valorAlvo = saidas.get(indexInstanciaTeste);
 		
@@ -30,8 +28,8 @@ public class Perceptron {
 			
 			atualizaBias(eta, valorPredito, valorAlvo);
 			atualizaPesos(valorPredito, valoresTeste, saidas);
-			
 			atualizaIndice(valoresTeste);
+			atualizaFU(saidas);
 			
 			valorPredito = prediz(valoresTeste.get(indexInstanciaTeste));
 			valorAlvo = saidas.get(indexInstanciaTeste);
@@ -40,9 +38,9 @@ public class Perceptron {
 	
 	private Double calculaU(String valorTeste) {
 		var u = bias;
-		for(var peso : pesos) {
-			var valor =  convertePesoParaValor(valorTeste, peso);
-			u += valor * peso + threshold;
+		for(int i = 0; i < pesos.size(); i++) {
+			var valor =  converteValorParaDouble(valorTeste, i);
+			u += valor * pesos.get(i) + threshold;
 		}
 		return u;
 	}
@@ -57,11 +55,12 @@ public class Perceptron {
 	}
 	
 	public void atualizaPesos(Double valorPredito, List<String> valoresTeste, List<Double> saidas) {
+		final int[] counter = {0};
 		pesos = pesos.stream().
 				map(peso -> atualizaPeso(
 						peso, eta, valorPredito,
 						saidas.get(indexInstanciaTeste),
-						convertePesoParaValor(valoresTeste.get(indexInstanciaTeste), peso))).
+						converteValorParaDouble(valoresTeste.get(indexInstanciaTeste), counter[0]++))).
 				collect(Collectors.toList());
 	}
 	
@@ -84,8 +83,7 @@ public class Perceptron {
 		valoresF = new double[] {uniqueVals.get(0), uniqueVals.get(uniqueVals.size()-1)};
 	}
 	
-	private Double convertePesoParaValor(String valorTeste, Double peso) {
-		var indexOf = pesos.indexOf(peso);
-		return Double.parseDouble("" + valorTeste.charAt(indexOf));
+	private Double converteValorParaDouble(String valorTeste, int index) {
+		return Double.parseDouble("" + valorTeste.charAt(index));
 	}
 }
