@@ -21,6 +21,8 @@ public class Perceptron {
 	
 	public void treina(List<String> valoresTeste, List<Double> saidas) {
 		
+		atualizaFU(saidas);
+		
 		var valorPredito = prediz(valoresTeste.get(indexInstanciaTeste));
 		var valorAlvo = saidas.get(indexInstanciaTeste);
 		
@@ -29,7 +31,6 @@ public class Perceptron {
 			atualizaBias(eta, valorPredito, valorAlvo);
 			atualizaPesos(valorPredito, valoresTeste, saidas);
 			atualizaIndice(valoresTeste);
-			atualizaFU(saidas);
 			
 			valorPredito = prediz(valoresTeste.get(indexInstanciaTeste));
 			valorAlvo = saidas.get(indexInstanciaTeste);
