@@ -51,10 +51,6 @@ public class Perceptron {
 		return u < threshold ? valoresF[0] : valoresF[1];
 	}
 	
-	public Double atualizaBias(Double eta, Double y1, Double y) {
-		return bias = bias + eta * (y - y1);
-	}
-	
 	public void atualizaPesos(Double valorPredito, List<String> valoresTeste, List<Double> saidas) {
 		final int[] counter = {0};
 		pesos = pesos.stream().
@@ -67,6 +63,10 @@ public class Perceptron {
 	
 	public Double atualizaPeso(Double peso, Double eta, Double y1, Double y, Double xi) {
 		return peso + eta * (y - y1) * xi;
+	}
+	
+	public Double atualizaBias(Double eta, Double y1, Double y) {
+		return bias = bias + eta * (y - y1);
 	}
 	
 	private void atualizaIndice(List<String> valoresTeste) {
