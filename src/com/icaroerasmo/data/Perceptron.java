@@ -5,11 +5,12 @@ import java.util.stream.Collectors;
 
 public class Perceptron {
 
+	private int indexInstanciaTeste = 0;
+	
 	private Double eta;
 	private Double threshold;
 	private Double bias;
 	private List<Double> pesos;
-	private int indexInstanciaTeste = 0;
 	private double[] valoresF = {0D, 1D};
 	
 	public Perceptron(Double eta, Double threshold, Double bias, List<Double> pesos) {
@@ -35,6 +36,8 @@ public class Perceptron {
 			valorPredito = prediz(valoresTeste.get(indexInstanciaTeste));
 			valorAlvo = saidas.get(indexInstanciaTeste);
 		}
+		
+		indexInstanciaTeste = 0;
 	}
 	
 	private Double calculaU(String valorTeste) {
@@ -65,8 +68,8 @@ public class Perceptron {
 		return peso + eta * (y - y1) * xi;
 	}
 	
-	public Double atualizaBias(Double eta, Double y1, Double y) {
-		return bias = bias + eta * (y - y1);
+	public void atualizaBias(Double eta, Double y1, Double y) {
+		bias = bias + eta * (y - y1);
 	}
 	
 	private void atualizaIndice(List<String> valoresTeste) {
