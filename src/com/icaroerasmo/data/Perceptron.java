@@ -80,8 +80,6 @@ public class Perceptron {
 		}
 	}
 	
-	// Tenho que descobrir como atualizar
-	// os valores de FU
 	private void atualizaFU(List<Double> saidas) {
 		List<Double> uniqueVals = saidas.stream().distinct().collect(Collectors.toList());
 		valoresF = new double[] {uniqueVals.get(0), uniqueVals.get(uniqueVals.size()-1)};
