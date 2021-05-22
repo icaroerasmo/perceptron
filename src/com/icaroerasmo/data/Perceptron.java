@@ -11,7 +11,7 @@ public class Perceptron {
 	private Double threshold;
 	private Double bias;
 	private List<Double> pesos;
-	private double[] valoresF = {0D, 1D};
+	private double[] valoresF;
 	
 	public Perceptron(Double eta, Double threshold, Double bias, List<Double> pesos) {
 		this.eta = eta;
