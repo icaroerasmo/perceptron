@@ -100,7 +100,7 @@ public class Tupla {
 		
 		@Override
 		public int hashCode() {
-			return 13 + (this.chave != null ? this.chave.hashCode() : 0);
+			return index * chave.hashCode() * valor.hashCode();
 		}
 		
 		@Override
