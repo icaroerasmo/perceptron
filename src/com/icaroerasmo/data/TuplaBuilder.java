@@ -9,6 +9,11 @@ public class TuplaBuilder {
 		tupla = new Tupla(index++);
 	}
 	
+	public TuplaBuilder add(String chave, Integer valor) {
+		add(chave, valor.doubleValue());
+		return this;
+	}
+	
 	public TuplaBuilder add(String chave, Double valor) {
 		tupla.put(chave, valor);
 		return this;

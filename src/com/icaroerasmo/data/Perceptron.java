@@ -11,56 +11,62 @@ public class Perceptron {
 	private Double threshold;
 	private Double bias;
 	private List<Double> pesos;
+	private Integer epochs;
 	private double[] valoresF;
 	
-	public Perceptron(Double eta, Double threshold, Double bias, List<Double> pesos) {
+	public Perceptron(Double eta, Double threshold, Double bias, Integer epochs, List<Double> pesos) {
 		this.eta = eta;
 		this.threshold = threshold;
 		this.bias = bias;
+		this.epochs = epochs;
 		this.pesos = pesos;
 	}
 	
-	public void treina(List<String> valoresTeste, List<Double> saidas) {
+	public void treina(List<Tupla> valoresTeste, List<Double> labels, String rotulo) {
 		
-		atualizaFU(saidas);
+		int counter = 1;
 		
-		var valorPredito = prediz(valoresTeste.get(indexInstanciaTeste));
-		var valorAlvo = saidas.get(indexInstanciaTeste);
+		atualizaFU(labels);
 		
-		while(!valorPredito.equals(valorAlvo)) {
+		Double valorPredito = prediz(valoresTeste.get(indexInstanciaTeste));
+		Double valorAlvo = valoresTeste.get(indexInstanciaTeste).getAsDouble(rotulo);
+		
+		while(counter < epochs || !valorPredito.equals(valorAlvo)) {
 			
 			atualizaBias(eta, valorPredito, valorAlvo);
-			atualizaPesos(valorPredito, valoresTeste, saidas);
+			atualizaPesos(valorPredito, valoresTeste, rotulo);
 			atualizaIndice(valoresTeste);
 			
 			valorPredito = prediz(valoresTeste.get(indexInstanciaTeste));
-			valorAlvo = saidas.get(indexInstanciaTeste);
+			valorAlvo = valoresTeste.get(indexInstanciaTeste).getAsDouble(rotulo);
+			
+			counter++;
 		}
 		
 		indexInstanciaTeste = 0;
 	}
 	
-	private Double calculaU(String valorTeste) {
-		var u = bias;
+	private Double calculaU(Tupla valorTeste) {
+		Double u = bias;
 		for(int i = 0; i < pesos.size(); i++) {
-			var valor =  converteValorParaDouble(valorTeste, i);
+			Double valor =  (Double) valorTeste.get(""+i).get();
 			u += valor * pesos.get(i) + threshold;
 		}
 		return u;
 	}
 	
-	public Double prediz(String valorTeste) {
-		var u = calculaU(valorTeste);
+	public Double prediz(Tupla valorTeste) {
+		Double u = calculaU(valorTeste);
 		return u < threshold ? valoresF[0] : valoresF[1];
 	}
 	
-	public void atualizaPesos(Double valorPredito, List<String> valoresTeste, List<Double> saidas) {
+	public void atualizaPesos(Double valorPredito, List<Tupla> valoresTeste, String rotulo ) {
 		final int[] counter = {0};
 		pesos = pesos.stream().
 				map(peso -> atualizaPeso(
 						peso, eta, valorPredito,
-						saidas.get(indexInstanciaTeste),
-						converteValorParaDouble(valoresTeste.get(indexInstanciaTeste), counter[0]++))).
+						(Double) valoresTeste.get(indexInstanciaTeste).get(rotulo).get(),
+						(Double) valoresTeste.get(indexInstanciaTeste).get(""+counter[0]++).get())).
 				collect(Collectors.toList());
 	}
 	
@@ -72,7 +78,7 @@ public class Perceptron {
 		bias = bias + eta * (y - y1);
 	}
 	
-	private void atualizaIndice(List<String> valoresTeste) {
+	private void atualizaIndice(List<Tupla> valoresTeste) {
 		if(indexInstanciaTeste < valoresTeste.size() - 1) {
 			indexInstanciaTeste++;
 		} else {
@@ -83,9 +89,5 @@ public class Perceptron {
 	private void atualizaFU(List<Double> saidas) {
 		List<Double> uniqueVals = saidas.stream().distinct().collect(Collectors.toList());
 		valoresF = new double[] {uniqueVals.get(0), uniqueVals.get(uniqueVals.size()-1)};
-	}
-	
-	private Double converteValorParaDouble(String valorTeste, int index) {
-		return Double.parseDouble("" + valorTeste.charAt(index));
 	}
 }
