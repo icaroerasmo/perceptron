@@ -16,6 +16,11 @@ public class Tupla {
 		pares = new HashSet<Tupla.Par>();
 	}
 	
+	public Double getByIndex(Integer index) {
+		var valor = get(index).orElseThrow();
+		return (Double) valor;
+	}
+	
 	public Double getAsDouble(String chave) {
 		var valor = get(chave).orElseThrow();
 		return (Double) valor;
@@ -35,6 +40,12 @@ public class Tupla {
 				map(p -> p.getValor()).findAny();
 	}
 	
+	public Optional<Object> get(Integer index) {
+		return pares.stream().
+				filter(p -> p.getIndex().equals(index)).
+				map(p -> p.getValor()).findAny();
+	}
+	
 	public List<String> getChaves() {
 		return pares.stream().
 				map(c -> c.getChave()).
@@ -48,11 +59,11 @@ public class Tupla {
 	}
 	
 	public void put(String chave, Double valor) {
-		pares.add(new Par(chave, valor));
+		pares.add(new Par(pares.size(), chave, valor));
 	}
 	
 	public void put(String chave, String valor) {
-		pares.add(new Par(chave, valor.toLowerCase()));
+		pares.add(new Par(pares.size(), chave, valor.toLowerCase()));
 	}
 	
 	public boolean isEmpty() {
@@ -65,12 +76,18 @@ public class Tupla {
 	
 	private class Par {
 		
+		private Integer index;
 		private String chave;
 		private Object valor;
 		
-		private Par(String chave, Object valor) {
+		private Par(Integer index, String chave, Object valor) {
+			this.index = index;
 			this.chave = chave.toLowerCase();
 			this.valor = valor;
+		}
+		
+		Integer getIndex() {
+			return index;
 		}
 		
 		String getChave() {

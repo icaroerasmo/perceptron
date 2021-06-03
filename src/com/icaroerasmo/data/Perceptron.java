@@ -61,12 +61,11 @@ public class Perceptron {
 	}
 	
 	public void atualizaPesos(Double valorPredito, List<Tupla> valoresTeste, String rotulo ) {
-		final int[] counter = {0};
 		pesos = pesos.stream().
 				map(peso -> atualizaPeso(
 						peso, eta, valorPredito,
 						(Double) valoresTeste.get(indexInstanciaTeste).get(rotulo).get(),
-						(Double) valoresTeste.get(indexInstanciaTeste).get(""+counter[0]++).get())).
+						(Double) valoresTeste.get(indexInstanciaTeste).getByIndex(pesos.indexOf(peso)))).
 				collect(Collectors.toList());
 	}
 	
