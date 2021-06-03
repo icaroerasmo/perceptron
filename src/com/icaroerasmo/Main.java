@@ -26,7 +26,7 @@ public class Main {
 		List<Double> pesos = Arrays.asList(0.4, -0.6, 0.6);
 	
 		Perceptron perceptron = new Perceptron(eta, threshold, bias, epochs, pesos);
-		perceptron.treina(instancias, labels, "3");
+		perceptron.treina(instancias, labels, 3);
 		
 		
 		List<Tupla> testes = Arrays.asList(

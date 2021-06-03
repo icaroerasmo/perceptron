@@ -16,7 +16,7 @@ public class Tupla {
 		pares = new HashSet<Tupla.Par>();
 	}
 	
-	public Double getByIndex(Integer index) {
+	public Double getAsDouble(Integer index) {
 		var valor = get(index).orElseThrow();
 		return (Double) valor;
 	}

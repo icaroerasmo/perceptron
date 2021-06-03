@@ -22,7 +22,7 @@ public class Perceptron {
 		this.pesos = pesos;
 	}
 	
-	public void treina(List<Tupla> valoresTeste, List<Double> labels, String rotulo) {
+	public void treina(List<Tupla> valoresTeste, List<Double> labels, Integer rotulo) {
 		
 		int counter = 1;
 		
@@ -60,12 +60,12 @@ public class Perceptron {
 		return u < threshold ? valoresF[0] : valoresF[1];
 	}
 	
-	public void atualizaPesos(Double valorPredito, List<Tupla> valoresTeste, String rotulo ) {
+	public void atualizaPesos(Double valorPredito, List<Tupla> valoresTeste, Integer rotulo ) {
 		pesos = pesos.stream().
 				map(peso -> atualizaPeso(
 						peso, eta, valorPredito,
-						(Double) valoresTeste.get(indexInstanciaTeste).get(rotulo).get(),
-						(Double) valoresTeste.get(indexInstanciaTeste).getByIndex(pesos.indexOf(peso)))).
+						valoresTeste.get(indexInstanciaTeste).getAsDouble(rotulo),
+						valoresTeste.get(indexInstanciaTeste).getAsDouble(pesos.indexOf(peso)))).
 				collect(Collectors.toList());
 	}
 	
